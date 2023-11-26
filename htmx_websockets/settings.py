@@ -124,3 +124,10 @@ SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 LOGIN_REDIRECT_URL = 'index'
 ASGI_APPLICATION = 'htmx_websockets.asgi.application'
+
+# Using in-memory channel layer for DEV, use redis if releasing to PROD
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
