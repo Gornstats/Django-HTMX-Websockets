@@ -1,5 +1,6 @@
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
+from django.template.loader import get_template
 
 class NotificationConsumer(WebsocketConsumer):
     def connect(self):
@@ -19,4 +20,8 @@ class NotificationConsumer(WebsocketConsumer):
         )
     
     def user_joined(self, event):
-        self.send(text_data=event['text'])
+        # self.send(text_data=event['text'])
+        html = get_template("core/partials/notification.html").render(
+            context = {'username': event['text']}
+        )
+        self.send(text_data=html)

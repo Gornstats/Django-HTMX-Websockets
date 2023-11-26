@@ -6,3 +6,5 @@ Notification sent via websocket, utilising django-channels package
 Use HTMX to swap notification HTML into all user's views
 
 Future application: use this for a quiz game!ls
+
+TODO: think there's an issue with TW, need to re-do the dropdowns in navbar
