@@ -5,6 +5,11 @@ from django.template.loader import get_template
 class NotificationConsumer(WebsocketConsumer):
     def connect(self):
         # print(self.channel_name) - gives unique name of client consumer
+        self.user = self.scope['user']
+        # reject connection if user is not authenticated (logged in)
+        if not self.user.is_authenticated:
+            self.close()
+            return
         self.GROUP_NAME = 'user-notifications' #fixed group for testing that all users are added to
         
         # Join room group
@@ -15,9 +20,10 @@ class NotificationConsumer(WebsocketConsumer):
 
     def disconnect(self, close_code):
         # Leave room group
-        async_to_sync(self.channel_layer.group_discard)(
-            self.GROUP_NAME, self.channel_name
-        )
+        if self.user.is_authenticated:
+            async_to_sync(self.channel_layer.group_discard)(
+                self.GROUP_NAME, self.channel_name
+            )
     
     def user_joined(self, event):
         # self.send(text_data=event['text'])
